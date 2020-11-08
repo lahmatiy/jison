@@ -1,4 +1,6 @@
-exports.testParser = require("./parser/parser-tests");
+exports.testLexer = require("./lexer");
+exports.testParser = require("./parser");
 
-if (require.main === module)
+if (require.main === module) {
     require("test").run(exports);
+}
