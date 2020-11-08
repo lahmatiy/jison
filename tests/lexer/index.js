@@ -887,7 +887,6 @@ exports["test unput location"] = function() {
 
     var lexer = new RegExpLexer(dict);
     lexer.setInput(input);
-    console.log(lexer.rules);
 
     assert.equal(lexer.next(), "X");
     assert.deepEqual(lexer.yylloc, {first_line: 1,
@@ -931,7 +930,6 @@ exports["test unput location again"] = function() {
 
     var lexer = new RegExpLexer(dict);
     lexer.setInput(input);
-    console.log(lexer.rules);
 
     assert.equal(lexer.next(), "X");
     assert.deepEqual(lexer.yylloc, {first_line: 1,
