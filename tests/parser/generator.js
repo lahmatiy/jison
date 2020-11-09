@@ -26,12 +26,12 @@ exports["test amd module generator"] = function() {
     var gen = new Jison.Generator(grammar);
     gen.lexer = new Lexer(lexData);
 
-    var parserSource = gen.generateAMDModule();
-    var parser = null,
-        define = function(callback){
-            // temporary AMD-style define function, for testing.
-            parser = callback();
-        };
+    var parserSource = gen.generateModule();
+    var parser = null;
+    var define = function(callback){
+        // temporary AMD-style define function, for testing.
+        parser = callback();
+    };
     eval(parserSource);
 
     assert.ok(parser.parse(input));
@@ -58,7 +58,7 @@ exports["test commonjs module generator"] = function () {
     var gen = new Jison.Generator(grammar);
     gen.lexer = new Lexer(lexData);
 
-    var parserSource = gen.generateCommonJSModule();
+    var parserSource = gen.generateModule();
     var exports = {};
     eval(parserSource);
 
@@ -113,7 +113,7 @@ exports["test module generator with module name"] = function () {
     var gen = new Jison.Generator(grammar);
     gen.lexer = new Lexer(lexData);
 
-    var parserSource = gen.generate({moduleType: "js", moduleName: "parsey"});
+    var parserSource = gen.generateModule({ moduleName: "parsey" });
     eval(parserSource);
 
     assert.ok(parsey.parse(input));
@@ -245,7 +245,7 @@ exports["test module include code"] = function () {
     var gen = new Jison.Generator(grammar);
     gen.lexer = new Lexer(lexData);
 
-    var parserSource = gen.generateCommonJSModule();
+    var parserSource = gen.generateModule();
     var exports = {};
     eval(parserSource);
 
@@ -269,7 +269,7 @@ exports["test lexer module include code"] = function () {
     var gen = new Jison.Generator(grammar);
     gen.lexer = new Lexer(lexData);
 
-    var parserSource = gen.generateCommonJSModule();
+    var parserSource = gen.generateModule();
     var exports = {};
     eval(parserSource);
 
@@ -320,7 +320,7 @@ exports["test module include code using generator from parser"] = function () {
     var gen = new Jison.Parser(grammar);
     gen.lexer = new Lexer(lexData);
 
-    var parserSource = gen.generateCommonJSModule();
+    var parserSource = gen.generateModule();
     var exports = {};
     eval(parserSource);
 
@@ -343,7 +343,7 @@ exports["test module include with each generator type"] = function () {
 
     var gen = new Jison.Parser(grammar);
     gen.lexer = new Lexer(lexData);
-    ['generateModule', 'generateAMDModule', 'generateCommonJSModule']
+    ['generateModule']
     .map(function(type) {
       var source = gen[type]();
       assert.ok(/TEST_VAR/.test(source), type + " supports module include");
@@ -367,7 +367,7 @@ exports["test compiling a parser/lexer"] = function () {
       ' -> [$1, $2, $3, $4].join(\' \'); \n    ;';
 
     var parser = new Jison.Parser(grammar);
-    var generated = parser.generate();
+    var generated = parser.generateModule();
 
     var tmpFile = path.resolve(__dirname, 'tmp-parser.js');
     fs.writeFileSync(tmpFile, generated);
