@@ -1,6 +1,9 @@
 Jison (remastered)
 ==================
 
+[![NPM version](https://img.shields.io/npm/v/@lahmatiy/jison.svg)](https://www.npmjs.com/package/@lahmatiy/jison)
+[![Build Status](https://travis-ci.org/lahmatiy/jison.svg?branch=master)](https://travis-ci.org/lahmatiy/jison)
+
 That's a fork of [Jison](http://github.com/zaach/jison) parser generator by [Zach Carter](http://github.com/zaach/).
 
 The difference:
@@ -23,9 +26,9 @@ Briefly, Jison takes a JSON encoded grammar or Bison style grammar and outputs a
 
 ## Installation
 
-Using npm:
-
-    npm install jison -g
+```
+    npm install @lahmatiy/jison
+```
 
 ## Usage
 
