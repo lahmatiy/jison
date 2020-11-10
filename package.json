@@ -1,41 +1,34 @@
 {
-  "name": "jison",
-  "version": "0.4.18",
-  "description": "A parser generator with Bison's API",
-  "author": "Zach Carter <zach@carter.name> (http://zaa.ch)",
-  "license": "MIT",
-  "keywords": [
-    "jison",
-    "bison",
-    "yacc",
-    "parser",
-    "generator",
-    "lexer",
-    "flex",
-    "tokenizer",
-    "compiler"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/zaach/jison.git"
-  },
-  "bugs": {
-    "email": "jison@librelist.com",
-    "url": "http://github.com/zaach/jison/issues"
-  },
-  "main": "lib/jison",
-  "engines": {
-    "node": ">=0.8"
-  },
-  "dependencies": {
-    "ebnf-parser": "0.1.10",
-    "lex-parser": "~0.1.3"
-  },
-  "devDependencies": {
-    "test": "0.6.x"
-  },
-  "scripts": {
-    "test": "node tests/all-tests.js"
-  },
-  "homepage": "http://jison.org"
+    "name": "jison",
+    "version": "0.4.18-remastered.1",
+    "description": "A parser generator with Bison's API",
+    "author": "Zach Carter <zach@carter.name> (http://zaa.ch)",
+    "license": "MIT",
+    "keywords": [
+        "jison",
+        "bison",
+        "yacc",
+        "parser",
+        "generator",
+        "lexer",
+        "flex",
+        "tokenizer",
+        "compiler"
+    ],
+    "homepage": "http://jison.org",
+    "repository": "lahmatiy/jison",
+    "main": "lib/jison",
+    "engines": {
+        "node": ">=8.0"
+    },
+    "dependencies": {
+        "ebnf-parser": "0.1.10",
+        "lex-parser": "~0.1.3"
+    },
+    "devDependencies": {
+        "test": "0.6.x"
+    },
+    "scripts": {
+        "test": "node tests/all-tests.js"
+    }
 }
