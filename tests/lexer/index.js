@@ -1,4 +1,4 @@
-var RegExpLexer = require("../../lib/lexer"),
+var Lexer = require("../../lib/lexer"),
     assert = require("assert");
 
 exports["test basic matchers"] = function() {
@@ -12,7 +12,7 @@ exports["test basic matchers"] = function() {
 
     var input = "xxyx";
 
-    var lexer = new RegExpLexer(dict, input);
+    var lexer = new Lexer(dict, input);
     assert.equal(lexer.lex(), "X");
     assert.equal(lexer.lex(), "X");
     assert.equal(lexer.lex(), "Y");
@@ -31,7 +31,7 @@ exports["test functional matchers"] = function() {
 
     var input = "xxYx";
 
-    var lexer = new RegExpLexer(dict, input);
+    var lexer = new Lexer(dict, input);
     assert.equal(lexer.lex(), "X");
     assert.equal(lexer.lex(), "X");
     assert.equal(lexer.lex(), "Y");
@@ -50,7 +50,7 @@ exports["test set yy"] = function() {
 
     var input = "xxyx";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input, { x: 'EX' });
     assert.equal(lexer.lex(), "EX");
 };
@@ -66,7 +66,7 @@ exports["test set input after"] = function() {
 
     var input = "xxyx";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), "X");
@@ -87,7 +87,7 @@ exports["test unrecognized char"] = function() {
 
     var input = "xa";
 
-    var lexer = new RegExpLexer(dict, input);
+    var lexer = new Lexer(dict, input);
     assert.equal(lexer.lex(), "X");
     assert.throws(function(){lexer.lex()}, "bad char");
 };
@@ -107,7 +107,7 @@ exports["test macro"] = function() {
 
     var input = "x12234y42";
 
-    var lexer = new RegExpLexer(dict, input);
+    var lexer = new Lexer(dict, input);
     assert.equal(lexer.lex(), "X");
     assert.equal(lexer.lex(), "NAT");
     assert.equal(lexer.lex(), "Y");
@@ -129,7 +129,7 @@ exports["test macro precedence"] = function() {
 
     var input = "129-abfe-42dc-ea12";
 
-    var lexer = new RegExpLexer(dict, input);
+    var lexer = new Lexer(dict, input);
     assert.equal(lexer.lex(), "HEX");
     assert.equal(lexer.lex(), "-");
     assert.equal(lexer.lex(), "HEX");
@@ -159,7 +159,7 @@ exports["test nested macros"] = function () {
 
     var input = "x1y42y123";
 
-    var lexer = new RegExpLexer(dict, input);
+    var lexer = new Lexer(dict, input);
     assert.equal(lexer.lex(), "X");
     assert.equal(lexer.lex(), "N");
     assert.equal(lexer.lex(), "Y");
@@ -184,7 +184,7 @@ exports["test nested macro precedence"] = function() {
 
     var input = "#129-#abfe-#42dc-#ea12";
 
-    var lexer = new RegExpLexer(dict, input);
+    var lexer = new Lexer(dict, input);
     assert.equal(lexer.lex(), "HEX");
     assert.equal(lexer.lex(), "-");
     assert.equal(lexer.lex(), "HEX");
@@ -206,7 +206,7 @@ exports["test action include"] = function() {
 
     var input = "x";
 
-    var lexer = new RegExpLexer(dict, input);
+    var lexer = new Lexer(dict, input);
     assert.equal(lexer.lex(), "Y");
     assert.equal(lexer.lex(), "EOF");
 };
@@ -223,7 +223,7 @@ exports["test ignored"] = function() {
 
     var input = "x x   y x";
 
-    var lexer = new RegExpLexer(dict, input);
+    var lexer = new Lexer(dict, input);
     assert.equal(lexer.lex(), "X");
     assert.equal(lexer.lex(), "X");
     assert.equal(lexer.lex(), "Y");
@@ -244,7 +244,7 @@ exports["test disambiguate"] = function() {
 
     var input = "if forever for for";
 
-    var lexer = new RegExpLexer(dict, input);
+    var lexer = new Lexer(dict, input);
     assert.equal(lexer.lex(), "IF");
     assert.equal(lexer.lex(), "IDENTIFIER");
     assert.equal(lexer.lex(), "FOR");
@@ -261,7 +261,7 @@ exports["test yytext overwrite"] = function() {
 
     var input = "x";
 
-    var lexer = new RegExpLexer(dict, input);
+    var lexer = new Lexer(dict, input);
     lexer.lex();
     assert.equal(lexer.yytext, "hi der");
 };
@@ -277,7 +277,7 @@ exports["test yylineno"] = function() {
 
     var input = "x\nxy\n\n\nx";
 
-    var lexer = new RegExpLexer(dict, input);
+    var lexer = new Lexer(dict, input);
     assert.equal(lexer.yylineno, 0);
     assert.equal(lexer.lex(), "x");
     assert.equal(lexer.lex(), "x");
@@ -299,7 +299,7 @@ exports["test yylloc"] = function() {
 
     var input = "x\nxy\n\n\nx";
 
-    var lexer = new RegExpLexer(dict, input);
+    var lexer = new Lexer(dict, input);
     assert.equal(lexer.lex(), "x");
     assert.equal(lexer.yylloc.first_column, 0);
     assert.equal(lexer.yylloc.last_column, 1);
@@ -338,7 +338,7 @@ exports["test more()"] = function() {
 
     var input = 'x"fgjdrtj\\"sdfsdf"x';
 
-    var lexer = new RegExpLexer(dict, input);
+    var lexer = new Lexer(dict, input);
     assert.equal(lexer.lex(), "X");
     assert.equal(lexer.lex(), "STRING");
     assert.equal(lexer.lex(), "X");
@@ -357,7 +357,7 @@ exports["test defined token returns"] = function() {
 
     var input = "xxyx";
 
-    var lexer = new RegExpLexer(dict, input, tokens);
+    var lexer = new Lexer(dict, input, tokens);
 
     assert.equal(lexer.lex(), 2);
     assert.equal(lexer.lex(), 2);
@@ -377,7 +377,7 @@ exports["test module generator from constructor"] = function() {
 
     var input = "xxyx";
 
-    var lexerSource = RegExpLexer.generate(dict);
+    var lexerSource = Lexer.generate(dict);
     eval(lexerSource);
     lexer.setInput(input);
 
@@ -399,7 +399,7 @@ exports["test module generator"] = function() {
 
     var input = "xxyx";
 
-    var lexer_ = new RegExpLexer(dict);
+    var lexer_ = new Lexer(dict);
     var lexerSource = lexer_.generateModule();
     eval(lexerSource);
     lexer.setInput(input);
@@ -429,7 +429,7 @@ exports["test generator with more complex lexer"] = function() {
 
     var input = 'x"fgjdrtj\\"sdfsdf"x';
 
-    var lexer_ = new RegExpLexer(dict);
+    var lexer_ = new Lexer(dict);
     var lexerSource = lexer_.generateModule();
     eval(lexerSource);
     lexer.setInput(input);
@@ -451,7 +451,7 @@ exports["test commonjs module generator"] = function() {
 
     var input = "xxyx";
 
-    var lexer_ = new RegExpLexer(dict);
+    var lexer_ = new Lexer(dict);
     var lexerSource = lexer_.generateModule();
     var exports = {};
     eval(lexerSource);
@@ -564,7 +564,7 @@ exports["test DJ lexer"] = function() {
                       };\
                     }";
 
-    var lexer = new RegExpLexer(dict.lex);
+    var lexer = new Lexer(dict.lex);
     lexer.setInput(input);
     var tok;
     while (tok = lexer.lex(), tok!==1) {
@@ -577,7 +577,7 @@ exports["test instantiation from string"] = function() {
 
     var input = "x";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), "X");
@@ -600,7 +600,7 @@ exports["test inclusive start conditions"] = function() {
     };
     var input = "xenter-testxyy";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), "X");
@@ -626,7 +626,7 @@ exports["test exclusive start conditions"] = function() {
     };
     var input = "xy//yxteadh//ste\ny";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), "X");
@@ -651,7 +651,7 @@ exports["test pop start condition stack"] = function() {
     };
     var input = "xy//yxteadh//ste\ny";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), "X");
@@ -676,7 +676,7 @@ exports["test star start condition"] = function() {
     };
     var input = "xy//yxteadh//stey";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), "X");
@@ -699,7 +699,7 @@ exports["test start condition constants"] = function() {
     };
     var input = "xy//y";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), "X");
@@ -718,7 +718,7 @@ exports["test unicode encoding"] = function() {
     };
     var input = "\u2713\u03c0y";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), "CHECK");
@@ -735,7 +735,7 @@ exports["test unicode"] = function() {
     };
     var input = "πy";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), "PI");
@@ -752,7 +752,7 @@ exports["test longest match returns"] = function() {
     };
     var input = "cat!";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), "CAT");
@@ -768,7 +768,7 @@ exports["test case insensitivity"] = function() {
     };
     var input = "Cat";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), "CAT");
@@ -783,7 +783,7 @@ exports["test less"] = function() {
     };
     var input = "cat";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), "CAT");
@@ -804,7 +804,7 @@ exports["test EOF unput"] = function() {
     };
     var input = "U";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), "U");
@@ -821,7 +821,7 @@ exports["test flex mode default rule"] = function() {
     };
     var input = "xyx";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), "X");
@@ -837,7 +837,7 @@ exports["test pipe precedence"] = function() {
     };
     var input = "xny";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), "X_Y");
@@ -855,7 +855,7 @@ exports["test ranges"] = function() {
     };
     var input = "xxxyy";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), "X");
@@ -875,7 +875,7 @@ exports["test unput location"] = function() {
     };
     var input = "xxxy\ny";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.next(), "X");
@@ -918,7 +918,7 @@ exports["test unput location again"] = function() {
     };
     var input = "xxxy\ny\ny";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.next(), "X");
@@ -959,7 +959,7 @@ exports["test backtracking lexer reject() method"] = function() {
     };
     var input = "A5";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), "WORD");
@@ -977,7 +977,7 @@ exports["test lexer reject() exception when not in backtracking mode"] = functio
     };
     var input = "A5";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
 
     assert.throws(function() {
@@ -999,7 +999,7 @@ exports["test yytext state after unput"] = function() {
 
     var input = "cat4";
 
-    var lexer = new RegExpLexer(dict);
+    var lexer = new Lexer(dict);
     lexer.setInput(input);
     assert.equal(lexer.lex(), "CAT");
     /*the yytext should be 'cat' since we unput '4' from 'cat4' */

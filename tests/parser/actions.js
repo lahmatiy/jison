@@ -1,5 +1,5 @@
 var Jison = require("../setup").Jison,
-    RegExpLexer = require("../setup").RegExpLexer,
+    Lexer = require("../setup").Lexer,
     assert = require("assert");
 
 exports["test Semantic action basic return"] = function() {
@@ -18,7 +18,7 @@ exports["test Semantic action basic return"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('x'), 0, "semantic action");
     assert.equal(parser.parse('y'), 1, "semantic action");
@@ -38,7 +38,7 @@ exports["test return null"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('x'), null, "semantic action");
 };
@@ -59,7 +59,7 @@ exports["test terminal semantic values are not null"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
 
     assert.deepEqual(parser.parse('x'), [true], "semantic action");
     assert.deepEqual(parser.parse('y'), ['y'], "semantic action");
@@ -82,7 +82,7 @@ exports["test Semantic action stack lookup"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('x'), "EX", "return first token");
     assert.equal(parser.parse('yx'), "BYEX", "return first after reduction");
@@ -103,7 +103,7 @@ exports["test Semantic actions on nullable grammar"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('xx'), "->xx", "return first after reduction");
 };
@@ -123,7 +123,7 @@ exports["test named semantic value"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('xx'), "->xx", "return first after reduction");
 };
@@ -145,7 +145,7 @@ exports["test ambiguous named semantic value"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('xyx'), "xyx", "return first after reduction");
 };
@@ -165,7 +165,7 @@ exports["test vars that look like named semantic values shouldn't be replaced"] 
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('xx'), "->xx", "return first after reduction");
 };
@@ -186,7 +186,7 @@ exports["test previous semantic value lookup ($0)"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('xxy'), "xxxx", "return first after reduction");
 };
@@ -210,7 +210,7 @@ exports["test negative semantic value lookup ($-1)"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('zxy'), "zxz", "return first after reduction");
 };
@@ -230,7 +230,7 @@ exports["test Build AST"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
 
     var expectedAST = ['A',{},
         ['ID',{value:'x'}],
@@ -259,7 +259,7 @@ exports["test 0+0 grammar"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData2);
+    parser.lexer = new Lexer(lexData2);
 
     var expectedAST = ["+", ["+", [0], [0]], [0]];
 
@@ -284,7 +284,7 @@ exports["test implicit $$ = $1 action"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData2);
+    parser.lexer = new Lexer(lexData2);
 
     var expectedAST = ["+", ["+", [0], [0]], [0]];
 
@@ -305,7 +305,7 @@ exports["test yytext"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('x'), "x", "return first token");
 };
@@ -324,7 +324,7 @@ exports["test yyleng"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('x'), 1, "return first token");
 };
@@ -345,7 +345,7 @@ exports["test yytext more"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('xy'), "xy", "return first token");
 };
@@ -369,7 +369,7 @@ exports["test action include"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('y'), 1, "semantic action");
 };
@@ -391,7 +391,7 @@ exports["test next token not shifted if only one action"] = function () {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
     assert.ok(parser.parse('(y)y'), "should parse correctly");
 };
 
@@ -413,7 +413,7 @@ exports["test token array LIFO"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
     assert.equal(parser.parse('ac'), "abc", "should return second token");
 };
 
@@ -434,7 +434,7 @@ exports["test YYACCEPT"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('x'), "EX", "return first token");
     assert.equal(parser.parse('yx'), true, "return first after reduction");
@@ -457,7 +457,7 @@ exports["test YYABORT"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('x'), "EX", "return first token");
     assert.equal(parser.parse('yx'), false, "return first after reduction");
@@ -478,7 +478,7 @@ exports["test parse params"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('y', "foo", "bar"), "foobar", "semantic action");
 };
@@ -501,7 +501,7 @@ exports["test symbol aliases"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
     assert.equal(parser.parse('abc'), "abc", "should return original string");
 };
 
@@ -523,6 +523,6 @@ exports["test symbol aliases in ebnf"] = function() {
     };
 
     var parser = new Jison.Parser(grammar);
-    parser.lexer = new RegExpLexer(lexData);
+    parser.lexer = new Lexer(lexData);
     assert.equal(parser.parse('abc'), "ab", "should tolerate aliases in subexpression");
 };
