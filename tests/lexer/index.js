@@ -433,7 +433,7 @@ exports["test commonjs module generator"] = function() {
     var input = "xxyx";
 
     var lexer_ = new RegExpLexer(dict);
-    var lexerSource = lexer_.generateCommonJSModule();
+    var lexerSource = lexer_.generateModule();
     var exports = {};
     eval(lexerSource);
     exports.lexer.setInput(input);
@@ -443,35 +443,6 @@ exports["test commonjs module generator"] = function() {
     assert.equal(exports.lex(), "Y");
     assert.equal(exports.lex(), "X");
     assert.equal(exports.lex(), "EOF");
-};
-
-exports["test amd module generator"] = function() {
-    var dict = {
-        rules: [
-           ["x", "return 'X';" ],
-           ["y", "return 'Y';" ],
-           ["$", "return 'EOF';" ]
-       ]
-    };
-
-    var input = "xxyx";
-
-    var lexer_ = new RegExpLexer(dict);
-    var lexerSource = lexer_.generateAMDModule();
-
-    var lexer;
-    var define = function (_, fn) {
-      lexer = fn();
-    };
-
-    eval(lexerSource);
-    lexer.setInput(input);
-
-    assert.equal(lexer.lex(), "X");
-    assert.equal(lexer.lex(), "X");
-    assert.equal(lexer.lex(), "Y");
-    assert.equal(lexer.lex(), "X");
-    assert.equal(lexer.lex(), "EOF");
 };
 
 exports["test DJ lexer"] = function() {
