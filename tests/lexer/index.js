@@ -20,6 +20,25 @@ exports["test basic matchers"] = function() {
     assert.equal(lexer.lex(), "EOF");
 };
 
+exports["test functional matchers"] = function() {
+    var dict = {
+        rules: [
+           [input => input[0] === 'x' ? [input[0]] : null, "return 'X';" ],
+           ["Y", "return 'Y';" ],
+           ["$", "return 'EOF';" ]
+       ]
+    };
+
+    var input = "xxYx";
+
+    var lexer = new RegExpLexer(dict, input);
+    assert.equal(lexer.lex(), "X");
+    assert.equal(lexer.lex(), "X");
+    assert.equal(lexer.lex(), "Y");
+    assert.equal(lexer.lex(), "X");
+    assert.equal(lexer.lex(), "EOF");
+};
+
 exports["test set yy"] = function() {
     var dict = {
         rules: [
@@ -965,7 +984,7 @@ exports["test lexer reject() exception when not in backtracking mode"] = functio
       lexer.lex();
     },
     function(err) {
-      return (err instanceof Error) && /You can only invoke reject/.test(err);
+      return (err instanceof Error) && /allowed only when options\.backtrack_lexer = true/.test(err);
     });
 };
 
