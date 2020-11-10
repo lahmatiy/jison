@@ -1,5 +1,5 @@
 {
-    "name": "jison",
+    "name": "@lahmatiy/jison",
     "version": "0.4.18-remastered.1",
     "description": "A parser generator with Bison's API",
     "author": "Zach Carter <zach@carter.name> (http://zaa.ch)",
@@ -26,9 +26,12 @@
         "lex-parser": "~0.1.3"
     },
     "devDependencies": {
+        "eslint": "^7.13.0",
         "test": "0.6.x"
     },
     "scripts": {
-        "test": "node tests/all-tests.js"
+        "lint": "eslint lib",
+        "test": "node tests/all-tests.js",
+        "travis": "npm run lint && npm run test"
     }
 }
