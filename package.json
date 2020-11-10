@@ -27,11 +27,11 @@
     },
     "devDependencies": {
         "eslint": "^7.13.0",
-        "test": "0.6.x"
+        "mocha": "^8.2.1"
     },
     "scripts": {
-        "lint": "eslint lib",
-        "test": "node tests/all-tests.js",
+        "lint": "eslint lib tests",
+        "test": "mocha -u exports --reporter ${REPORTER:-progress} tests/lexer tests/parser",
         "travis": "npm run lint && npm run test"
     }
 }
