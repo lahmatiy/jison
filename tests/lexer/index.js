@@ -379,9 +379,7 @@ exports['test module generator from constructor'] = function() {
 
     var input = 'xxyx';
 
-    var lexerSource = Lexer.generate(dict);
-    var lexer;
-    eval(lexerSource);
+    var lexer = new Function(Lexer.generate(dict) + ';return lexer')();;
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), 'X');
@@ -403,9 +401,7 @@ exports['test module generator'] = function() {
     var input = 'xxyx';
 
     var lexer_ = new Lexer(dict);
-    var lexerSource = lexer_.generateModule();
-    var lexer;
-    eval(lexerSource);
+    var lexer = new Function(lexer_.generateModule() + ';return lexer')();
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), 'X');
@@ -434,9 +430,7 @@ exports['test generator with more complex lexer'] = function() {
     var input = 'x"fgjdrtj\\"sdfsdf"x';
 
     var lexer_ = new Lexer(dict);
-    var lexerSource = lexer_.generateModule();
-    var lexer;
-    eval(lexerSource);
+    var lexer = new Function(lexer_.generateModule() + ';return lexer')();
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), 'X');

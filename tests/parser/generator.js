@@ -54,9 +54,7 @@ exports['test module generator'] = function () {
     var gen = new Jison.Generator(grammar);
     gen.lexer = new Lexer(lexData);
 
-    var parserSource = gen.generateModule();
-    var parser;
-    eval(parserSource);
+    var parser = new Function(gen.generateModule() + ';return parser')();
 
     assert.ok(parser.parse(input));
 };
@@ -82,11 +80,9 @@ exports['test module generator with module name'] = function () {
     var gen = new Jison.Generator(grammar);
     gen.lexer = new Lexer(lexData);
 
-    var parserSource = gen.generateModule({ moduleName: 'parsey' });
-    var parsey;
-    eval(parserSource);
+    var parser = new Function(gen.generateModule() + ';return parser')();
 
-    assert.ok(parsey.parse(input));
+    assert.ok(parser.parse(input));
 };
 
 exports['test module generator with namespaced module name'] = function () {
@@ -191,10 +187,7 @@ exports['test module include'] = function () {
     };
 
     var gen = new Jison.Generator(grammar);
-
-    var parserSource = gen.generateModule();
-    var parser;
-    eval(parserSource);
+    var parser = new Function(gen.generateModule() + ';return parser')();
 
     assert.ok(parser.parse(JSON.stringify(grammar.bnf)));
 };
@@ -216,11 +209,7 @@ exports['test module include code'] = function () {
     var gen = new Jison.Generator(grammar);
     gen.lexer = new Lexer(lexData);
 
-    var parserSource = gen.generateModule();
-    // eslint-disable-next-line no-unused-vars
-    var exports = {};
-    var parser;
-    eval(parserSource);
+    var parser = new Function(gen.generateModule() + ';return parser')();
 
     assert.equal(parser.parse('y'), 1, 'semantic action');
 };
@@ -241,12 +230,7 @@ exports['test lexer module include code'] = function () {
 
     var gen = new Jison.Generator(grammar);
     gen.lexer = new Lexer(lexData);
-
-    var parserSource = gen.generateModule();
-    // eslint-disable-next-line no-unused-vars
-    var exports = {};
-    var parser;
-    eval(parserSource);
+    var parser = new Function(gen.generateModule() + ';return parser')();
 
     assert.equal(parser.parse('y'), 1, 'semantic action');
 };
@@ -265,10 +249,7 @@ exports['test generated parser instance creation'] = function () {
     };
 
     var gen = new Jison.Generator(grammar);
-
-    var parserSource = gen.generateModule();
-    var parser;
-    eval(parserSource);
+    var parser = new Function(gen.generateModule() + ';return parser')();
 
     var p = new parser.Parser;
 
@@ -296,11 +277,7 @@ exports['test module include code using generator from parser'] = function () {
     var gen = new Jison.Parser(grammar);
     gen.lexer = new Lexer(lexData);
 
-    var parserSource = gen.generateModule();
-    // eslint-disable-next-line no-unused-vars
-    var exports = {};
-    var parser;
-    eval(parserSource);
+    var parser = new Function(gen.generateModule() + ';return parser')();
 
     assert.equal(parser.parse('y'), 1, 'semantic action');
 };
