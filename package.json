@@ -19,7 +19,7 @@
     "repository": "lahmatiy/jison",
     "main": "lib/jison",
     "engines": {
-        "node": ">=8.0"
+        "node": ">=10.10"
     },
     "dependencies": {
         "ebnf-parser": "0.1.10",

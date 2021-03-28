@@ -1,5 +1,6 @@
 ## next
 
+- Dropped support for Node.js prior 10.10
 - Reworked `Lexer`'s code generation
 - Changed `Lexer` constructor `Lexer(dict, input, tokens)` → `Lexer(dict, tokens)`
 - Renamed `Lexer.generate()` method into `Lexer.generateModule()`
