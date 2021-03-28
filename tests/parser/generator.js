@@ -27,11 +27,10 @@ it('test commonjs module generator', function () {
     var gen = new Jison.Generator(grammar);
     gen.lexer = new Lexer(lexData);
 
-    var parserSource = gen.generateModule();
-    var exports = {};
-    eval(parserSource);
+    var module = { exports: {} };
+    var parser = Function('module', 'exports', 'return' + gen.generateModule())(module, module.exports);
 
-    assert.ok(exports.parse(input));
+    assert.ok(parser.parse(input));
 });
 
 it('test module generator', function () {
@@ -55,7 +54,7 @@ it('test module generator', function () {
     var gen = new Jison.Generator(grammar);
     gen.lexer = new Lexer(lexData);
 
-    var parser = new Function(gen.generateModule() + ';return parser')();
+    var parser = new Function('return' + gen.generateModule())();
 
     assert.ok(parser.parse(input));
 });
@@ -81,38 +80,9 @@ it('test module generator with module name', function () {
     var gen = new Jison.Generator(grammar);
     gen.lexer = new Lexer(lexData);
 
-    var parser = new Function(gen.generateModule() + ';return parser')();
+    var parser = new Function('return' + gen.generateModule())();
 
     assert.ok(parser.parse(input));
-});
-
-it('test module generator with namespaced module name', function () {
-    var lexData = {
-        rules: [
-            ['x', "return 'x';"],
-            ['y', "return 'y';"]
-        ]
-    };
-    var grammar = {
-        tokens: 'x y',
-        startSymbol: 'A',
-        bnf: {
-            'A': ['A x',
-                'A y',
-                '']
-        }
-    };
-
-    var compiler = {};
-
-    var input = 'xyxxxy';
-    var gen = new Jison.Generator(grammar);
-    gen.lexer = new Lexer(lexData);
-
-    var parserSource = gen.generateModule({moduleName: 'compiler.parser'});
-    eval(parserSource);
-
-    assert.ok(compiler.parser.parse(input));
 });
 
 it('test module include', function () {
@@ -188,7 +158,7 @@ it('test module include', function () {
     };
 
     var gen = new Jison.Generator(grammar);
-    var parser = new Function(gen.generateModule() + ';return parser')();
+    var parser = new Function('return' + gen.generateModule())();
 
     assert.ok(parser.parse(JSON.stringify(grammar.bnf)));
 });
@@ -210,7 +180,7 @@ it('test module include code', function () {
     var gen = new Jison.Generator(grammar);
     gen.lexer = new Lexer(lexData);
 
-    var parser = new Function(gen.generateModule() + ';return parser')();
+    var parser = new Function('return' + gen.generateModule())();
 
     assert.equal(parser.parse('y'), 1, 'semantic action');
 });
@@ -231,7 +201,7 @@ it('test lexer module include code', function () {
 
     var gen = new Jison.Generator(grammar);
     gen.lexer = new Lexer(lexData);
-    var parser = new Function(gen.generateModule() + ';return parser')();
+    var parser = new Function('return' + gen.generateModule())();
 
     assert.equal(parser.parse('y'), 1, 'semantic action');
 });
@@ -250,7 +220,7 @@ it('test generated parser instance creation', function () {
     };
 
     var gen = new Jison.Generator(grammar);
-    var parser = new Function(gen.generateModule() + ';return parser')();
+    var parser = new Function('return' + gen.generateModule())();
 
     var p = new parser.Parser;
 
@@ -278,7 +248,7 @@ it('test module include code using generator from parser', function () {
     var gen = new Jison.Parser(grammar);
     gen.lexer = new Lexer(lexData);
 
-    var parser = new Function(gen.generateModule() + ';return parser')();
+    var parser = new Function('return' + gen.generateModule())();
 
     assert.equal(parser.parse('y'), 1, 'semantic action');
 });
@@ -323,10 +293,10 @@ it('test compiling a parser/lexer', function () {
       ' -> [$1, $2, $3, $4].join(\' \'); \n    ;';
 
     var parser = new Jison.Parser(grammar);
-    var generated = parser.generateModule();
-
     var tmpFile = path.resolve(tmpdir(), 'tmp-parser.js');
-    fs.writeFileSync(tmpFile, generated);
+
+    fs.writeFileSync(tmpFile, parser.generateModule('cjs'));
+
     try {
         var parser2 = require(tmpFile);
 
