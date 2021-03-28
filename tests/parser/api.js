@@ -9,7 +9,7 @@ var lexData = {
     ]
 };
 
-exports['test tokens as a string'] = function () {
+it('test tokens as a string', function () {
 
     var grammar = {
         tokens: 'x y',
@@ -24,9 +24,9 @@ exports['test tokens as a string'] = function () {
     var parser = new Jison.Parser(grammar);
     parser.lexer = new Lexer(lexData);
     assert.ok(parser.parse('xyx'), 'parse xyx');
-};
+});
 
-exports['test generator'] = function () {
+it('test generator', function () {
 
     var grammar = {
         bnf: {
@@ -39,9 +39,9 @@ exports['test generator'] = function () {
     var parser = new Jison.Parser(grammar);
     parser.lexer = new Lexer(lexData);
     assert.ok(parser.parse('xyx'), 'parse xyx');
-};
+});
 
-exports['test extra spaces in productions'] = function () {
+it('test extra spaces in productions', function () {
 
     var grammar = {
         tokens: 'x y',
@@ -56,9 +56,9 @@ exports['test extra spaces in productions'] = function () {
     var parser = new Jison.Parser(grammar);
     parser.lexer = new Lexer(lexData);
     assert.ok(parser.parse('xyx'), 'parse xyx');
-};
+});
 
-exports['test | seperated rules'] = function () {
+it('test | seperated rules', function () {
 
     var grammar = {
         tokens: 'x y',
@@ -71,9 +71,9 @@ exports['test | seperated rules'] = function () {
     var parser = new Jison.Parser(grammar);
     parser.lexer = new Lexer(lexData);
     assert.ok(parser.parse('xyx'), 'parse xyx');
-};
+});
 
-exports['test start symbol optional'] = function () {
+it('test start symbol optional', function () {
 
     var grammar = {
         tokens: 'x y',
@@ -85,9 +85,9 @@ exports['test start symbol optional'] = function () {
     new Jison.Parser(grammar);
     var ok = true;
     assert.ok(ok, 'no error');
-};
+});
 
-exports['test start symbol should be nonterminal'] = function () {
+it('test start symbol should be nonterminal', function () {
 
     var grammar = {
         tokens: 'x y',
@@ -100,9 +100,9 @@ exports['test start symbol should be nonterminal'] = function () {
     assert.throws(function() {
         new Jison.Generator(grammar);
     }, 'throws error');
-};
+});
 
-exports['test token list as string'] = function () {
+it('test token list as string', function () {
 
     var grammar = {
         tokens: 'x y',
@@ -114,9 +114,9 @@ exports['test token list as string'] = function () {
 
     var gen = new Jison.Generator(grammar);
     assert.ok(gen.terminals.indexOf('x') >= 0);
-};
+});
 
-exports['test grammar options'] = function () {
+it('test grammar options', function () {
 
     var grammar = {
         options: {type: 'slr'},
@@ -131,9 +131,9 @@ exports['test grammar options'] = function () {
 
     var gen = new Jison.Generator(grammar);
     assert.ok(gen);
-};
+});
 
-exports['test overwrite grammar options'] = function () {
+it('test overwrite grammar options', function () {
 
     var grammar = {
         options: {type: 'slr'},
@@ -148,9 +148,9 @@ exports['test overwrite grammar options'] = function () {
 
     var gen = new Jison.Generator(grammar, {type: 'lr0'});
     assert.equal(gen.constructor, Jison.LR0Generator);
-};
+});
 
-exports['test yy shared scope'] = function () {
+it('test yy shared scope', function () {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -172,10 +172,10 @@ exports['test yy shared scope'] = function () {
     parser.lexer = new Lexer(lexData);
     assert.equal(parser.parse('y'), 'bar', 'should return bar');
     assert.equal(parser.parse('xxy'), 'foo', 'should return foo');
-};
+});
 
 
-exports['test optional token declaration'] = function () {
+it('test optional token declaration', function () {
 
     var grammar = {
         options: {type: 'slr'},
@@ -188,10 +188,10 @@ exports['test optional token declaration'] = function () {
 
     var gen = new Jison.Generator(grammar, {type: 'lr0'});
     assert.equal(gen.constructor, Jison.LR0Generator);
-};
+});
 
 
-exports['test custom parse error method'] = function () {
+it('test custom parse error method', function () {
     var lexData = {
         rules: [
             ['a', "return 'a';"],
@@ -228,18 +228,18 @@ exports['test custom parse error method'] = function () {
     assert.strictEqual(result.text, 'a', 'parse error text should equal b');
     assert.strictEqual(typeof result.token, 'string', 'parse error token should be a string');
     assert.strictEqual(result.line, 0, 'hash should include line number');
-};
+});
 
-exports['test jison grammar as string'] = function () {
+it('test jison grammar as string', function () {
 
     var grammar = '%% A : A x | A y | ;';
 
     var parser = new Jison.Generator(grammar).createParser();
     parser.lexer = new Lexer(lexData);
     assert.ok(parser.parse('xyx'), 'parse xyx');
-};
+});
 
-exports['test no default resolve'] = function () {
+it('test no default resolve', function () {
     var grammar = {
         tokens: ['x'],
         startSymbol: 'A',
@@ -258,10 +258,10 @@ exports['test no default resolve'] = function () {
     assert.throws(function () {
         parser.parse('xx');
     }, 'throws parse error for multiple actions');
-};
+});
 
 
-exports["test EOF in 'Unexpected token' error message"] = function () {
+it("test EOF in 'Unexpected token' error message", function () {
 
     var grammar = {
         bnf: {
@@ -280,9 +280,9 @@ exports["test EOF in 'Unexpected token' error message"] = function () {
         parser.parse('xx');
     });
 
-};
+});
 
-exports['test locations'] = function () {
+it('test locations', function () {
     var grammar = {
         tokens: ['x', 'y'],
         startSymbol: 'A',
@@ -309,9 +309,9 @@ exports['test locations'] = function () {
     assert.equal(loc.last_line, 2, 'last line correct');
     assert.equal(loc.first_column, 1, 'first column correct');
     assert.equal(loc.last_column, 2, 'last column correct');
-};
+});
 
-exports['test default location action'] = function () {
+it('test default location action', function () {
     var grammar = {
         tokens: ['x', 'y'],
         startSymbol: 'A',
@@ -338,9 +338,9 @@ exports['test default location action'] = function () {
     assert.equal(loc.last_line, 2, 'last line correct');
     assert.equal(loc.first_column, 1, 'first column correct');
     assert.equal(loc.last_column, 2, 'last column correct');
-};
+});
 
-exports['test locations by term name in action'] = function () {
+it('test locations by term name in action', function () {
     var grammar = {
         tokens: ['x', 'y'],
         startSymbol: 'A',
@@ -368,9 +368,9 @@ exports['test locations by term name in action'] = function () {
     assert.equal(loc.last_line, 2, 'last line correct');
     assert.equal(loc.first_column, 1, 'first column correct');
     assert.equal(loc.last_column, 2, 'last column correct');
-};
+});
 
-exports['test lexer with no location support'] = function () {
+it('test lexer with no location support', function () {
     var grammar = {
         tokens: ['x', 'y'],
         startSymbol: 'A',
@@ -398,9 +398,9 @@ exports['test lexer with no location support'] = function () {
         last_column: undefined,
         last_line: undefined
     });
-};
+});
 
-exports['test intance creation'] = function () {
+it('test intance creation', function () {
     var grammar = {
         tokens: ['x', 'y'],
         startSymbol: 'A',
@@ -428,9 +428,9 @@ exports['test intance creation'] = function () {
     parser.blah = true;
 
     assert.notEqual(parser.blah, parser2.blah, 'should not inherit');
-};
+});
 
-exports['test reentrant parsing'] = function () {
+it('test reentrant parsing', function () {
     var grammar = {
         bnf: {
             'S': ['A EOF'],
@@ -457,5 +457,5 @@ exports['test reentrant parsing'] = function () {
     parser.lexer = new Lexer(lexData);
     var result = parser.parse('xxw');
     assert.equal(result, 'foobar');
-};
+});
 

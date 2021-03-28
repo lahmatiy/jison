@@ -9,8 +9,7 @@ var lexData = {
     ]
 };
 
-exports['test left-recursive nullable grammar'] = function () {
-
+it('test left-recursive nullable grammar', function () {
     var grammar = {
         tokens: ['x'],
         startSymbol: 'A',
@@ -30,9 +29,9 @@ exports['test left-recursive nullable grammar'] = function () {
         parser.parse('y');
     }, 'throws parse error on invalid token');
     assert.ok(gen.conflicts == 0, 'no conflicts');
-};
+});
 
-exports['test right-recursive nullable grammar'] = function () {
+it('test right-recursive nullable grammar', function () {
 
     var grammar = {
         tokens: ['x'],
@@ -51,4 +50,4 @@ exports['test right-recursive nullable grammar'] = function () {
     assert.ok(gen.table.length == 4, 'table has 4 states');
     assert.ok(gen.conflicts == 0, 'no conflicts');
     assert.equal(gen.nullable('A'), true, 'A is nullable');
-};
+});

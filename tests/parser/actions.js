@@ -2,7 +2,7 @@ var Jison = require('../setup').Jison;
 var Lexer = require('../setup').Lexer;
 var assert = require('assert');
 
-exports['test Semantic action basic return'] = function() {
+it('test Semantic action basic return', function() {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -22,9 +22,9 @@ exports['test Semantic action basic return'] = function() {
 
     assert.equal(parser.parse('x'), 0, 'semantic action');
     assert.equal(parser.parse('y'), 1, 'semantic action');
-};
+});
 
-exports['test return null'] = function() {
+it('test return null', function() {
     var lexData = {
         rules: [
             ['x', "return 'x';"]
@@ -41,9 +41,9 @@ exports['test return null'] = function() {
     parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('x'), null, 'semantic action');
-};
+});
 
-exports['test terminal semantic values are not null'] = function() {
+it('test terminal semantic values are not null', function() {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -63,9 +63,9 @@ exports['test terminal semantic values are not null'] = function() {
 
     assert.deepEqual(parser.parse('x'), [true], 'semantic action');
     assert.deepEqual(parser.parse('y'), ['y'], 'semantic action');
-};
+});
 
-exports['test Semantic action stack lookup'] = function() {
+it('test Semantic action stack lookup', function() {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -86,9 +86,9 @@ exports['test Semantic action stack lookup'] = function() {
 
     assert.equal(parser.parse('x'), 'EX', 'return first token');
     assert.equal(parser.parse('yx'), 'BYEX', 'return first after reduction');
-};
+});
 
-exports['test Semantic actions on nullable grammar'] = function() {
+it('test Semantic actions on nullable grammar', function() {
     var lexData = {
         rules: [
             ['x', "return 'x';"]
@@ -106,9 +106,9 @@ exports['test Semantic actions on nullable grammar'] = function() {
     parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('xx'), '->xx', 'return first after reduction');
-};
+});
 
-exports['test named semantic value'] = function() {
+it('test named semantic value', function() {
     var lexData = {
         rules: [
             ['x', "return 'x';"]
@@ -126,9 +126,9 @@ exports['test named semantic value'] = function() {
     parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('xx'), '->xx', 'return first after reduction');
-};
+});
 
-exports['test ambiguous named semantic value'] = function() {
+it('test ambiguous named semantic value', function() {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -148,9 +148,9 @@ exports['test ambiguous named semantic value'] = function() {
     parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('xyx'), 'xyx', 'return first after reduction');
-};
+});
 
-exports["test vars that look like named semantic values shouldn't be replaced"] = function() {
+it("test vars that look like named semantic values shouldn't be replaced", function() {
     var lexData = {
         rules: [
             ['x', "return 'x';"]
@@ -168,9 +168,9 @@ exports["test vars that look like named semantic values shouldn't be replaced"] 
     parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('xx'), '->xx', 'return first after reduction');
-};
+});
 
-exports['test previous semantic value lookup ($0)'] = function() {
+it('test previous semantic value lookup ($0)', function() {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -189,10 +189,10 @@ exports['test previous semantic value lookup ($0)'] = function() {
     parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('xxy'), 'xxxx', 'return first after reduction');
-};
+});
 
 
-exports['test negative semantic value lookup ($-1)'] = function() {
+it('test negative semantic value lookup ($-1)', function() {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -213,9 +213,9 @@ exports['test negative semantic value lookup ($-1)'] = function() {
     parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('zxy'), 'zxz', 'return first after reduction');
-};
+});
 
-exports['test Build AST'] = function() {
+it('test Build AST', function() {
     var lexData = {
         rules: [
             ['x', "return 'x';"]
@@ -239,9 +239,9 @@ exports['test Build AST'] = function() {
 
     var r = parser.parse('xxx');
     assert.deepEqual(r, expectedAST);
-};
+});
 
-exports['test 0+0 grammar'] = function() {
+it('test 0+0 grammar', function() {
     var lexData2 = {
         rules: [
             ['0', "return 'ZERO';"],
@@ -264,9 +264,9 @@ exports['test 0+0 grammar'] = function() {
     var expectedAST = ['+', ['+', [0], [0]], [0]];
 
     assert.deepEqual(parser.parse('0+0+0'), expectedAST);
-};
+});
 
-exports['test implicit $$ = $1 action'] = function() {
+it('test implicit $$ = $1 action', function() {
     var lexData2 = {
         rules: [
             ['0', "return 'ZERO';"],
@@ -289,9 +289,9 @@ exports['test implicit $$ = $1 action'] = function() {
     var expectedAST = ['+', ['+', [0], [0]], [0]];
 
     assert.deepEqual(parser.parse('0+0+0'), expectedAST);
-};
+});
 
-exports['test yytext'] = function() {
+it('test yytext', function() {
     var lexData = {
         rules: [
             ['x', "return 'x';"]
@@ -308,9 +308,9 @@ exports['test yytext'] = function() {
     parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('x'), 'x', 'return first token');
-};
+});
 
-exports['test yyleng'] = function() {
+it('test yyleng', function() {
     var lexData = {
         rules: [
             ['x', "return 'x';"]
@@ -327,9 +327,9 @@ exports['test yyleng'] = function() {
     parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('x'), 1, 'return first token');
-};
+});
 
-exports['test yytext more'] = function() {
+it('test yytext more', function() {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -348,9 +348,9 @@ exports['test yytext more'] = function() {
     parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('xy'), 'xy', 'return first token');
-};
+});
 
-exports['test action include'] = function() {
+it('test action include', function() {
     var lexData = {
         rules: [
             ['y', "return 'y';"]
@@ -373,9 +373,9 @@ exports['test action include'] = function() {
     parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('y'), 1, 'semantic action');
-};
+});
 
-exports['test next token not shifted if only one action'] = function () {
+it('test next token not shifted if only one action', function () {
     var lexData = {
         rules: [
             ['\\(', "return '(';"],
@@ -394,9 +394,9 @@ exports['test next token not shifted if only one action'] = function () {
     var parser = new Jison.Parser(grammar);
     parser.lexer = new Lexer(lexData);
     assert.ok(parser.parse('(y)y'), 'should parse correctly');
-};
+});
 
-exports['test token array LIFO'] = function() {
+it('test token array LIFO', function() {
     var lexData = {
         rules: [
             ['a', "return ['b','a'];"],
@@ -416,9 +416,9 @@ exports['test token array LIFO'] = function() {
     var parser = new Jison.Parser(grammar);
     parser.lexer = new Lexer(lexData);
     assert.equal(parser.parse('ac'), 'abc', 'should return second token');
-};
+});
 
-exports['test YYACCEPT'] = function() {
+it('test YYACCEPT', function() {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -439,9 +439,9 @@ exports['test YYACCEPT'] = function() {
 
     assert.equal(parser.parse('x'), 'EX', 'return first token');
     assert.equal(parser.parse('yx'), true, 'return first after reduction');
-};
+});
 
-exports['test YYABORT'] = function() {
+it('test YYABORT', function() {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -462,9 +462,9 @@ exports['test YYABORT'] = function() {
 
     assert.equal(parser.parse('x'), 'EX', 'return first token');
     assert.equal(parser.parse('yx'), false, 'return first after reduction');
-};
+});
 
-exports['test parse params'] = function() {
+it('test parse params', function() {
     var lexData = {
         rules: [
             ['y', "return 'y';"]
@@ -482,9 +482,9 @@ exports['test parse params'] = function() {
     parser.lexer = new Lexer(lexData);
 
     assert.equal(parser.parse('y', 'foo', 'bar'), 'foobar', 'semantic action');
-};
+});
 
-exports['test symbol aliases'] = function() {
+it('test symbol aliases', function() {
     var lexData = {
         rules: [
             ['a', "return 'a';"],
@@ -504,9 +504,9 @@ exports['test symbol aliases'] = function() {
     var parser = new Jison.Parser(grammar);
     parser.lexer = new Lexer(lexData);
     assert.equal(parser.parse('abc'), 'abc', 'should return original string');
-};
+});
 
-exports['test symbol aliases in ebnf'] = function() {
+it('test symbol aliases in ebnf', function() {
     var lexData = {
         rules: [
             ['a', "return 'a';"],
@@ -526,4 +526,4 @@ exports['test symbol aliases in ebnf'] = function() {
     var parser = new Jison.Parser(grammar);
     parser.lexer = new Lexer(lexData);
     assert.equal(parser.parse('abc'), 'ab', 'should tolerate aliases in subexpression');
-};
+});

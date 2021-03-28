@@ -9,8 +9,7 @@ var lexData = {
     ]
 };
 
-exports['test left-recursive nullable grammar'] = function () {
-
+it('test left-recursive nullable grammar', function () {
     var grammar = {
         tokens: ['x'],
         startSymbol: 'A',
@@ -28,16 +27,14 @@ exports['test left-recursive nullable grammar'] = function () {
     assert.throws(function () {
         parser.parse('y');
     },  'throws parse error on invalid token');
-};
+});
 
-exports['test right-recursive nullable grammar'] = function () {
-
+it('test right-recursive nullable grammar', function () {
     var grammar = {
         tokens: ['x'],
         startSymbol: 'A',
         bnf: {
-            'A': ['x A',
-                '']
+            'A': ['x A', '']
         }
     };
 
@@ -45,9 +42,9 @@ exports['test right-recursive nullable grammar'] = function () {
 
     assert.ok(gen.table.length == 4, 'table has 4 states');
     assert.ok(gen.conflicts == 2, 'encountered 2 conflicts');
-};
+});
 
-exports['test 0+0 grammar'] = function () {
+it('test 0+0 grammar', function () {
     var lexData2 = {
         rules: [
             ['0', "return 'ZERO';"],
@@ -73,4 +70,4 @@ exports['test 0+0 grammar'] = function () {
     assert.throws(function () {
         parser.parse('+');
     }, 'throws parse error on invalid');
-};
+});

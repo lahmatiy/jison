@@ -2,7 +2,7 @@ var Jison = require('../setup').Jison;
 var Lexer = require('../setup').Lexer;
 var assert = require('assert');
 
-exports['test Left associative rule'] = function () {
+it('test Left associative rule', function () {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -30,9 +30,9 @@ exports['test Left associative rule'] = function () {
 
     var r = parser.parse('x+x+x');
     assert.deepEqual(r, expectedAST);
-};
+});
 
-exports['test Right associative rule'] = function () {
+it('test Right associative rule', function () {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -60,9 +60,9 @@ exports['test Right associative rule'] = function () {
 
     var r = parser.parse('x+x+x');
     assert.deepEqual(r, expectedAST);
-};
+});
 
-exports['test Multiple precedence operators'] = function () {
+it('test Multiple precedence operators', function () {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -93,9 +93,9 @@ exports['test Multiple precedence operators'] = function () {
 
     var r = parser.parse('x*x+x');
     assert.deepEqual(r, expectedAST);
-};
+});
 
-exports['test Multiple precedence operators'] = function () {
+it('test Multiple precedence operators', function () {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -126,9 +126,9 @@ exports['test Multiple precedence operators'] = function () {
 
     var r = parser.parse('x+x*x');
     assert.deepEqual(r, expectedAST);
-};
+});
 
-exports['test Non-associative operator'] = function () {
+it('test Non-associative operator', function () {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -156,9 +156,9 @@ exports['test Non-associative operator'] = function () {
         parser.parse('x=x=x');
     }, 'throws parse error when operator used twice.');
     assert.ok(parser.parse('x=x'), 'normal use is okay.');
-};
+});
 
-exports['test Context-dependent precedence'] = function () {
+it('test Context-dependent precedence', function () {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -193,9 +193,9 @@ exports['test Context-dependent precedence'] = function () {
 
     var r = parser.parse('-x*-x*x-x');
     assert.deepEqual(r, expectedAST);
-};
+});
 
-exports['test multi-operator rules'] = function () {
+it('test multi-operator rules', function () {
     var grammar = {
         tokens: 'ID DOT ASSIGN LPAREN RPAREN EOF',
         startSymbol: 'S',
@@ -218,4 +218,4 @@ exports['test multi-operator rules'] = function () {
     var gen = new Jison.Generator(grammar, {type: 'slr'});
 
     assert.equal(gen.conflicts, 0);
-};
+});

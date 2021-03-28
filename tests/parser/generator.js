@@ -1,11 +1,12 @@
 var Jison = require('../setup').Jison;
 var Lexer = require('../setup').Lexer;
 var assert = require('assert');
+var { tmpdir } = require('os');
 
 var fs = require('fs');
 var path = require('path');
 
-exports['test commonjs module generator'] = function () {
+it('test commonjs module generator', function () {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -31,9 +32,9 @@ exports['test commonjs module generator'] = function () {
     eval(parserSource);
 
     assert.ok(exports.parse(input));
-};
+});
 
-exports['test module generator'] = function () {
+it('test module generator', function () {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -57,9 +58,9 @@ exports['test module generator'] = function () {
     var parser = new Function(gen.generateModule() + ';return parser')();
 
     assert.ok(parser.parse(input));
-};
+});
 
-exports['test module generator with module name'] = function () {
+it('test module generator with module name', function () {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -83,9 +84,9 @@ exports['test module generator with module name'] = function () {
     var parser = new Function(gen.generateModule() + ';return parser')();
 
     assert.ok(parser.parse(input));
-};
+});
 
-exports['test module generator with namespaced module name'] = function () {
+it('test module generator with namespaced module name', function () {
     var lexData = {
         rules: [
             ['x', "return 'x';"],
@@ -112,9 +113,9 @@ exports['test module generator with namespaced module name'] = function () {
     eval(parserSource);
 
     assert.ok(compiler.parser.parse(input));
-};
+});
 
-exports['test module include'] = function () {
+it('test module include', function () {
     var grammar = {
         'comment': 'ECMA-262 5th Edition, 15.12.1 The JSON Grammar. (Incomplete implementation)',
         'author': 'Zach Carter',
@@ -190,9 +191,9 @@ exports['test module include'] = function () {
     var parser = new Function(gen.generateModule() + ';return parser')();
 
     assert.ok(parser.parse(JSON.stringify(grammar.bnf)));
-};
+});
 
-exports['test module include code'] = function () {
+it('test module include code', function () {
     var lexData = {
         rules: [
             ['y', "return 'y';"]
@@ -212,9 +213,9 @@ exports['test module include code'] = function () {
     var parser = new Function(gen.generateModule() + ';return parser')();
 
     assert.equal(parser.parse('y'), 1, 'semantic action');
-};
+});
 
-exports['test lexer module include code'] = function () {
+it('test lexer module include code', function () {
     var lexData = {
         rules: [
             ['y', 'return test();']
@@ -233,9 +234,9 @@ exports['test lexer module include code'] = function () {
     var parser = new Function(gen.generateModule() + ';return parser')();
 
     assert.equal(parser.parse('y'), 1, 'semantic action');
-};
+});
 
-exports['test generated parser instance creation'] = function () {
+it('test generated parser instance creation', function () {
     var grammar = {
         lex: {
             rules: [
@@ -258,9 +259,9 @@ exports['test generated parser instance creation'] = function () {
     parser.blah = true;
 
     assert.notEqual(parser.blah, p.blah, "shouldn't inherit props");
-};
+});
 
-exports['test module include code using generator from parser'] = function () {
+it('test module include code using generator from parser', function () {
     var lexData = {
         rules: [
             ['y', "return 'y';"]
@@ -280,9 +281,9 @@ exports['test module include code using generator from parser'] = function () {
     var parser = new Function(gen.generateModule() + ';return parser')();
 
     assert.equal(parser.parse('y'), 1, 'semantic action');
-};
+});
 
-exports['test module include with each generator type'] = function () {
+it('test module include with each generator type', function () {
     var lexData = {
         rules: [
             ['y', "return 'y';"]
@@ -303,10 +304,10 @@ exports['test module include with each generator type'] = function () {
             var source = gen[type]();
             assert.ok(/TEST_VAR/.test(source), type + ' supports module include');
         });
-};
+});
 
 // test for issue #246
-exports['test compiling a parser/lexer'] = function () {
+it('test compiling a parser/lexer', function () {
     var grammar =
       '// Simple "happy happy joy joy" parser, written by Nolan Lawson\n' +
       '// Based on the song of the same name.\n\n' +
@@ -324,13 +325,16 @@ exports['test compiling a parser/lexer'] = function () {
     var parser = new Jison.Parser(grammar);
     var generated = parser.generateModule();
 
-    var tmpFile = path.resolve(__dirname, 'tmp-parser.js');
+    var tmpFile = path.resolve(tmpdir(), 'tmp-parser.js');
     fs.writeFileSync(tmpFile, generated);
-    var parser2 = require('./tmp-parser');
+    try {
+        var parser2 = require(tmpFile);
 
-    assert.ok(parser.parse('happy happy joy joy joy') === 'happy happy joy joy joy',
-        'original parser works');
-    assert.ok(parser2.parse('happy happy joy joy joy') === 'happy happy joy joy joy',
-        'generated parser works');
-    fs.unlinkSync(tmpFile);
-};
+        assert.ok(parser.parse('happy happy joy joy joy') === 'happy happy joy joy joy',
+            'original parser works');
+        assert.ok(parser2.parse('happy happy joy joy joy') === 'happy happy joy joy joy',
+            'generated parser works');
+    } finally {
+        fs.unlinkSync(tmpFile);
+    }
+});
