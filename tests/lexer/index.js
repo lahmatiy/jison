@@ -12,7 +12,8 @@ exports['test basic matchers'] = function() {
 
     var input = 'xxyx';
 
-    var lexer = new Lexer(dict, input);
+    var lexer = new Lexer(dict);
+    lexer.setInput(input);
     assert.equal(lexer.lex(), 'X');
     assert.equal(lexer.lex(), 'X');
     assert.equal(lexer.lex(), 'Y');
@@ -31,7 +32,8 @@ exports['test functional matchers'] = function() {
 
     var input = 'xxYx';
 
-    var lexer = new Lexer(dict, input);
+    var lexer = new Lexer(dict);
+    lexer.setInput(input);
     assert.equal(lexer.lex(), 'X');
     assert.equal(lexer.lex(), 'X');
     assert.equal(lexer.lex(), 'Y');
@@ -87,7 +89,8 @@ exports['test unrecognized char'] = function() {
 
     var input = 'xa';
 
-    var lexer = new Lexer(dict, input);
+    var lexer = new Lexer(dict);
+    lexer.setInput(input);
     assert.equal(lexer.lex(), 'X');
     assert.throws(function() {
         lexer.lex();
@@ -109,7 +112,8 @@ exports['test macro'] = function() {
 
     var input = 'x12234y42';
 
-    var lexer = new Lexer(dict, input);
+    var lexer = new Lexer(dict);
+    lexer.setInput(input);
     assert.equal(lexer.lex(), 'X');
     assert.equal(lexer.lex(), 'NAT');
     assert.equal(lexer.lex(), 'Y');
@@ -131,7 +135,8 @@ exports['test macro precedence'] = function() {
 
     var input = '129-abfe-42dc-ea12';
 
-    var lexer = new Lexer(dict, input);
+    var lexer = new Lexer(dict);
+    lexer.setInput(input);
     assert.equal(lexer.lex(), 'HEX');
     assert.equal(lexer.lex(), '-');
     assert.equal(lexer.lex(), 'HEX');
@@ -161,7 +166,8 @@ exports['test nested macros'] = function () {
 
     var input = 'x1y42y123';
 
-    var lexer = new Lexer(dict, input);
+    var lexer = new Lexer(dict);
+    lexer.setInput(input);
     assert.equal(lexer.lex(), 'X');
     assert.equal(lexer.lex(), 'N');
     assert.equal(lexer.lex(), 'Y');
@@ -186,7 +192,8 @@ exports['test nested macro precedence'] = function() {
 
     var input = '#129-#abfe-#42dc-#ea12';
 
-    var lexer = new Lexer(dict, input);
+    var lexer = new Lexer(dict);
+    lexer.setInput(input);
     assert.equal(lexer.lex(), 'HEX');
     assert.equal(lexer.lex(), '-');
     assert.equal(lexer.lex(), 'HEX');
@@ -208,7 +215,8 @@ exports['test action include'] = function() {
 
     var input = 'x';
 
-    var lexer = new Lexer(dict, input);
+    var lexer = new Lexer(dict);
+    lexer.setInput(input);
     assert.equal(lexer.lex(), 'Y');
     assert.equal(lexer.lex(), 'EOF');
 };
@@ -225,7 +233,8 @@ exports['test ignored'] = function() {
 
     var input = 'x x   y x';
 
-    var lexer = new Lexer(dict, input);
+    var lexer = new Lexer(dict);
+    lexer.setInput(input);
     assert.equal(lexer.lex(), 'X');
     assert.equal(lexer.lex(), 'X');
     assert.equal(lexer.lex(), 'Y');
@@ -246,7 +255,8 @@ exports['test disambiguate'] = function() {
 
     var input = 'if forever for for';
 
-    var lexer = new Lexer(dict, input);
+    var lexer = new Lexer(dict);
+    lexer.setInput(input);
     assert.equal(lexer.lex(), 'IF');
     assert.equal(lexer.lex(), 'IDENTIFIER');
     assert.equal(lexer.lex(), 'FOR');
@@ -263,7 +273,8 @@ exports['test yytext overwrite'] = function() {
 
     var input = 'x';
 
-    var lexer = new Lexer(dict, input);
+    var lexer = new Lexer(dict);
+    lexer.setInput(input);
     lexer.lex();
     assert.equal(lexer.yytext, 'hi der');
 };
@@ -279,7 +290,8 @@ exports['test yylineno'] = function() {
 
     var input = 'x\nxy\n\n\nx';
 
-    var lexer = new Lexer(dict, input);
+    var lexer = new Lexer(dict);
+    lexer.setInput(input);
     assert.equal(lexer.yylineno, 0);
     assert.equal(lexer.lex(), 'x');
     assert.equal(lexer.lex(), 'x');
@@ -301,7 +313,8 @@ exports['test yylloc'] = function() {
 
     var input = 'x\nxy\n\n\nx';
 
-    var lexer = new Lexer(dict, input);
+    var lexer = new Lexer(dict);
+    lexer.setInput(input);
     assert.equal(lexer.lex(), 'x');
     assert.equal(lexer.yylloc.first_column, 0);
     assert.equal(lexer.yylloc.last_column, 1);
@@ -340,7 +353,8 @@ exports['test more()'] = function() {
 
     var input = 'x"fgjdrtj\\"sdfsdf"x';
 
-    var lexer = new Lexer(dict, input);
+    var lexer = new Lexer(dict);
+    lexer.setInput(input);
     assert.equal(lexer.lex(), 'X');
     assert.equal(lexer.lex(), 'STRING');
     assert.equal(lexer.lex(), 'X');
@@ -359,7 +373,8 @@ exports['test defined token returns'] = function() {
 
     var input = 'xxyx';
 
-    var lexer = new Lexer(dict, input, tokens);
+    var lexer = new Lexer(dict, tokens);
+    lexer.setInput(input);
 
     assert.equal(lexer.lex(), 2);
     assert.equal(lexer.lex(), 2);
@@ -379,7 +394,7 @@ exports['test module generator from constructor'] = function() {
 
     var input = 'xxyx';
 
-    var lexer = new Function(Lexer.generate(dict) + ';return lexer')();;
+    var lexer = new Function('return' + Lexer.generateModule(dict))();
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), 'X');
@@ -401,7 +416,7 @@ exports['test module generator'] = function() {
     var input = 'xxyx';
 
     var lexer_ = new Lexer(dict);
-    var lexer = new Function(lexer_.generateModule() + ';return lexer')();
+    var lexer = new Function('return ' + lexer_.generateModule('iife'))();
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), 'X');
@@ -430,7 +445,7 @@ exports['test generator with more complex lexer'] = function() {
     var input = 'x"fgjdrtj\\"sdfsdf"x';
 
     var lexer_ = new Lexer(dict);
-    var lexer = new Function(lexer_.generateModule() + ';return lexer')();
+    var lexer = new Function('return' + lexer_.generateModule('iife'))();
     lexer.setInput(input);
 
     assert.equal(lexer.lex(), 'X');
@@ -451,9 +466,9 @@ exports['test commonjs module generator'] = function() {
     var input = 'xxyx';
 
     var lexer_ = new Lexer(dict);
-    var lexerSource = lexer_.generateModule();
-    var exports = {};
-    eval(lexerSource);
+    var module = { exports: {} };
+    new Function('module', 'exports', lexer_.generateModule('cjs'))(module, module.exports);
+    const exports = module.exports;
     exports.lexer.setInput(input);
 
     assert.equal(exports.lex(), 'X');
