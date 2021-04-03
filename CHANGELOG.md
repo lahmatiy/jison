@@ -1,3 +1,7 @@
+## next
+
+- Fixed function body extraction for arrow functions in a rule action
+
 ## 0.4.18-remastered.2 (2021-04-03)
 
 - Dropped support for Node.js prior 10.10
