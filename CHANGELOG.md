@@ -7,6 +7,7 @@
 - Removed support for `moduleName` in `Lexer#generateModule()` and `Lexer.generateModule()` methods
 - Added `format` option for `Lexer#generateModule(format)` and `Lexer.generateModule(dict, tokes, format)` methods. Supported formats are `cjs`, `esm` and `iife`
 - Changed `Generator#generateModule(opts)` → `Generator#generateModule(format)`
+- Reduced package size by omitting test files
 
 ## 0.4.18-remastered.1 (2020-11-10)
 
