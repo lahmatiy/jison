@@ -1,4 +1,4 @@
-## next
+## 0.4.18-remastered.3 (2021-04-03)
 
 - Fixed function body extraction for arrow functions in a rule action
 

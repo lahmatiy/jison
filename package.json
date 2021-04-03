@@ -1,6 +1,6 @@
 {
     "name": "@lahmatiy/jison",
-    "version": "0.4.18-remastered.2",
+    "version": "0.4.18-remastered.3",
     "description": "A parser generator with Bison's API",
     "author": "Zach Carter <zach@carter.name> (http://zaa.ch)",
     "license": "MIT",
